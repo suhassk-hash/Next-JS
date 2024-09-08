@@ -7,9 +7,9 @@ export async function POST(request:Request){
     await dbConnect();
     try{
         const{Username,email,password}=await request.json();
-        const existingUserVerifiedbyUsername = await userModel.findOne({ Username, isVerified: true });
+        const existingUserVerifiedbyUsername = await userModel.findOne({ Username, isVerified: true });  // first check with username 
 
-        if(existingUserVerifiedbyUsername){
+        if(existingUserVerifiedbyUsername){ //if there then close 
             return Response.json({
                 success:false,
                 message:"Username is Already Taken"
@@ -19,9 +19,9 @@ export async function POST(request:Request){
             }
             );  
         }
-        const existingUserbyEmail= await userModel.findOne({email})
+        const existingUserbyEmail= await userModel.findOne({email})  //if username is not there then check with email duplicate
         const verifyCode=Math.floor(100000+Math.random()*900000).toString();
-        if(existingUserbyEmail){
+        if(existingUserbyEmail){ // if user is there with same email then check if verified or not 
             if(existingUserbyEmail.isVerified){
                 return Response.json({
                     success:false,
